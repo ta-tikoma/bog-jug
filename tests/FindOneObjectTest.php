@@ -6,6 +6,7 @@ namespace tests;
 
 use BogJug\BogJug;
 use PHPUnit\Framework\TestCase;
+use tests\Data\GreenThing;
 use tests\Data\TinWoodman;
 
 final class FindOneObjectTest extends TestCase
@@ -13,6 +14,8 @@ final class FindOneObjectTest extends TestCase
     public function test_try_to_parse_one_match_to_object(): void
     {
         $bj = (new BogJug);
+
+        /** @var TinWoodman|null $tw */
         $tw = $bj->one(TinWoodman::class, <<<OZ
 One of the big trees had been partly chopped through, and standing beside
 it, with an uplifted axe in his hands, was a man made entirely of tin. His head
@@ -26,5 +29,24 @@ OZ);
         $this->assertNotNull($tw->legs);
         $this->assertNotNull($tw->body);
         $this->assertNull($tw->heart);
+    }
+
+    public function test_try_to_parse_object_with_array_property(): void
+    {
+        $bj = (new BogJug);
+
+        $things = $bj->many(GreenThing::class, <<<OZ
+There were many people — men, women, and children — walking about,
+and these were all dressed in green clothes and had greenish skins. They
+looked at Dorothy and her strangely assorted company with wondering eyes,
+and the children all ran away and hid behind their mothers when they saw the
+Lion; but no one spoke to them. Many shops stood in the street, and Dorothy
+saw that everything in them was green. Green candy and green pop corn were
+offered for sale, as well as green shoes, green hats, and green clothes of all sorts.
+At one place a man was selling green lemonade, and when the children bought
+it Dorothy could see that they paid for it with green pennies.
+OZ);
+
+        $this->assertCount(8, $things);
     }
 }

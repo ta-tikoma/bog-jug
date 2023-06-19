@@ -56,10 +56,11 @@ final class BogJug
         foreach ($reflectionClass->getProperties() as $property) {
             $name = $property->getName();
 
-            if ($this->typeService->isArray($property->getType())) {
+            if (isset($matches[$name])) {
+                $arguments[$name] = $matches[$name];
             } else {
-                if (isset($matches[$name])) {
-                    $arguments[$name] = $matches[$name];
+                if ($this->typeService->isArray($property->getType())) {
+                    $arguments[$name] = [];
                 } else {
                     $arguments[$name] = null;
                 }
@@ -68,5 +69,40 @@ final class BogJug
 
 
         return $reflectionClass->newInstanceArgs($arguments);
+    }
+
+    /**
+     * Get many object from text
+     */
+    public function many(string $className, string $text): array
+    {
+        $reflectionClass = new ReflectionClass($className);
+        $regex = $this->classService->getRegex($reflectionClass);
+
+        preg_match_all($regex, $text, $matches);
+        if (count($matches) === 0) {
+            return null;
+        }
+
+        $result = [];
+        foreach (array_keys($matches[0]) as $key) {
+            $arguments = [];
+            foreach ($reflectionClass->getProperties() as $property) {
+                $name = $property->getName();
+
+                if (isset($matches[$name][$key])) {
+                    $arguments[$name] = $matches[$name][$key];
+                } else {
+                    if ($this->typeService->isArray($property->getType())) {
+                        $arguments[$name] = [];
+                    } else {
+                        $arguments[$name] = null;
+                    }
+                }
+            }
+            $result[] = $reflectionClass->newInstanceArgs($arguments);
+        }
+
+        return $result;
     }
 }

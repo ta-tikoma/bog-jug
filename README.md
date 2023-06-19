@@ -1,4 +1,4 @@
-# bog-jug
+# Bog Jug
 Convert regex group to objects
 
 # Example

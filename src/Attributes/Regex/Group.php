@@ -9,7 +9,7 @@ use Attribute;
 /**
  * For set group regex base
  */
-#[Attribute(Attribute::TARGET_PARAMETER | Attribute::TARGET_PROPERTY)]
+#[Attribute(Attribute::IS_REPEATABLE | Attribute::TARGET_PARAMETER | Attribute::TARGET_PROPERTY)]
 final class Group
 {
     public function __construct(
