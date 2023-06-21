@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace BogJug\Services;
 
-use BogJug\Attributes\Flags\_Global;
 use BogJug\Attributes\Flags\Anchored;
 use BogJug\Attributes\Flags\DollarEndOnly;
 use BogJug\Attributes\Flags\Extended;
@@ -14,13 +13,11 @@ use BogJug\Attributes\Flags\MultiLine;
 use BogJug\Attributes\Flags\SingleLine;
 use BogJug\Attributes\Flags\Ungreedy;
 use BogJug\Attributes\Flags\Unicode;
-use Exception;
 use ReflectionClass;
 
 final class ClassService
 {
     private const FLAGS = [
-        'g' => _Global::class,
         'a' => Anchored::class,
         'd' => DollarEndOnly::class,
         'e' => Extended::class,
@@ -38,20 +35,14 @@ final class ClassService
     ) {
     }
 
-    public function getRegex(ReflectionClass $reflectionClass): string
+    public function getRegexWithFlags(ReflectionClass $reflectionClass): string
     {
-        $regex = '/';
-
-        $properites = $reflectionClass->getProperties();
-        if (count($properites) === 0) {
-            throw new Exception("{$reflectionClass->getName()} has not properties");
-        }
-
-        foreach ($properites as $property) {
-            $regex .= $this->propertyService->regexGroupFromProperty($property);
-        }
-
-        $regex .= '/' . $this->getFlags($reflectionClass);
+        $regex = '/'
+            . $this->propertyService->regexGroupFromProperties($reflectionClass)
+            . '/'
+            . $this->getFlags($reflectionClass)
+            //
+        ;
 
         return $regex;
     }

@@ -14,17 +14,36 @@ use BogJug\Attributes\Regex\After;
 use BogJug\Attributes\Regex\Before;
 use BogJug\Attributes\Regex\Group;
 use Exception;
+use ReflectionClass;
+use ReflectionIntersectionType;
+use ReflectionNamedType;
 use ReflectionProperty;
+use ReflectionUnionType;
 
 final class PropertyService
 {
     public function __construct(
         private AttributeService $attributeService,
-        private TypeService $typeService
+        private TypeService $typeService,
     ) {
     }
 
-    public function regexGroupFromProperty(ReflectionProperty $property): string
+    public function regexGroupFromProperties(ReflectionClass $reflectionClass): string
+    {
+        $regex = '';
+        $properites = $reflectionClass->getProperties();
+        if (count($properites) === 0) {
+            throw new Exception("{$reflectionClass->getName()} has not properties");
+        }
+
+        foreach ($properites as $property) {
+            $regex .= $this->regexGroupFromProperty($property);
+        }
+
+        return $regex;
+    }
+
+    private function regexGroupFromProperty(ReflectionProperty $property): string
     {
         $result = $this->getBeforeRegex($property)
             . "(?<{$property->getName()}>"
@@ -62,6 +81,15 @@ final class PropertyService
 
     private function collectGroupOptions(ReflectionProperty $reflectionProperty): string
     {
+        /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
+        $type = $reflectionProperty->getType();
+        $reflectionClass = $this->typeService->getClassOfType($type);
+        if ($reflectionClass !== null) {
+            throw new Exception("Property{$reflectionProperty->getName()} can't be type of class");
+            // @todo
+            // return $this->regexGroupFromProperties($reflectionClass);
+        }
+
         $attributes = $reflectionProperty->getAttributes(Group::class);
         if (count($attributes) === 0) {
             throw new Exception("{$reflectionProperty->getName()} has not Group attribute");
@@ -116,13 +144,11 @@ final class PropertyService
             return '?';
         }
 
+        /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
         $type = $reflectionProperty->getType();
-        if ($this->typeService->isArray($type)) {
-            if ($type->allowsNull()) {
-                return '*';
-            }
 
-            return '+';
+        if ($type === null) {
+            return '?';
         }
 
         if ($type->allowsNull()) {

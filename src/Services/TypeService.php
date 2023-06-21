@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace BogJug\Services;
 
+use ReflectionClass;
 use ReflectionIntersectionType;
 use ReflectionNamedType;
 use ReflectionUnionType;
 
 final class TypeService
 {
+    /**
+     * @todo
+     */
     public function isArray(ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type): bool
     {
         if ($type === null) {
@@ -32,5 +36,25 @@ final class TypeService
         }
 
         return false;
+    }
+
+    public function getClassOfType(
+        ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type
+    ): ReflectionClass|null {
+        if ($type === null) {
+            return null;
+        }
+
+        if ($type instanceof ReflectionNamedType) {
+            $name = $type->getName();
+
+            if (class_exists($name)) {
+                return new ReflectionClass($name);
+            }
+
+            return null;
+        }
+
+        return null;
     }
 }

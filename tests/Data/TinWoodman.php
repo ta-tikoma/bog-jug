@@ -12,15 +12,20 @@ use BogJug\Attributes\Regex\Group;
 final class TinWoodman
 {
     public function __construct(
-        #[Group('head'), After('.*')]
+        #[Group('head')]
+        #[After('.*')]
         public readonly string $head,
-        #[Group('arms'), After('.*')]
+        #[Group('arms')]
+        #[After('.*')]
         public readonly string $arms,
-        #[Group('legs'), After('.*')]
+        #[Group('legs')]
+        #[After('.*')]
         public readonly string $legs,
-        #[Group('body'), After('.*')]
+        #[Group('body')]
+        #[After('.*')]
         public readonly string $body,
-        #[Group('heart'), After('.*')]
+        #[Group('heart')]
+        #[After('.*')]
         public readonly string|null $heart,
     ) {
     }

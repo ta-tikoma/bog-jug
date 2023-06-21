@@ -14,38 +14,38 @@ final class BogJug
 {
     private ClassService $classService;
 
-    private TypeService $typeService;
-
     public function __construct()
     {
         $attributeService = new AttributeService();
-        $this->typeService = new TypeService();
         $this->classService = new ClassService(
             $attributeService,
-            new PropertyService(
-                $attributeService,
-                $this->typeService
-            )
+            new PropertyService($attributeService, new TypeService())
         );
     }
 
     /**
      * Class to regex (just for check you self)
+     *
+     * @param class-string $className
      */
     public function classToRegex(string $className): string
     {
         $reflectionClass = new ReflectionClass($className);
 
-        return $this->classService->getRegex($reflectionClass);
+        return $this->classService->getRegexWithFlags($reflectionClass);
     }
 
     /**
      * Get one object from text
+     *
+     * @template T
+     * @param class-string<T> $className
+     * @return T|null
      */
     public function one(string $className, string $text): mixed
     {
         $reflectionClass = new ReflectionClass($className);
-        $regex = $this->classService->getRegex($reflectionClass);
+        $regex = $this->classService->getRegexWithFlags($reflectionClass);
 
         preg_match($regex, $text, $matches);
         if (count($matches) === 0) {
@@ -59,29 +59,31 @@ final class BogJug
             if (isset($matches[$name])) {
                 $arguments[$name] = $matches[$name];
             } else {
-                if ($this->typeService->isArray($property->getType())) {
-                    $arguments[$name] = [];
-                } else {
-                    $arguments[$name] = null;
-                }
+                $arguments[$name] = null;
             }
         }
 
+        /** @var T $t */
+        $t = $reflectionClass->newInstanceArgs($arguments);
 
-        return $reflectionClass->newInstanceArgs($arguments);
+        return $t;
     }
 
     /**
      * Get many object from text
+     *
+     * @template T
+     * @param class-string<T> $className
+     * @return T[]
      */
     public function many(string $className, string $text): array
     {
         $reflectionClass = new ReflectionClass($className);
-        $regex = $this->classService->getRegex($reflectionClass);
+        $regex = $this->classService->getRegexWithFlags($reflectionClass);
 
         preg_match_all($regex, $text, $matches);
         if (count($matches) === 0) {
-            return null;
+            return [];
         }
 
         $result = [];
@@ -93,14 +95,13 @@ final class BogJug
                 if (isset($matches[$name][$key])) {
                     $arguments[$name] = $matches[$name][$key];
                 } else {
-                    if ($this->typeService->isArray($property->getType())) {
-                        $arguments[$name] = [];
-                    } else {
-                        $arguments[$name] = null;
-                    }
+                    $arguments[$name] = null;
                 }
             }
-            $result[] = $reflectionClass->newInstanceArgs($arguments);
+            /** @var T $t */
+            $t = $reflectionClass->newInstanceArgs($arguments);
+
+            $result[] = $t;
         }
 
         return $result;
