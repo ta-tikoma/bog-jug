@@ -38,6 +38,32 @@ final class TypeService
         return false;
     }
 
+    public function equalsType(
+        ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $actual,
+        string $expected
+    ): bool {
+        if ($actual === null) {
+            return false;
+        }
+
+        if ($actual instanceof ReflectionNamedType) {
+            if ($actual->getName() === $expected) {
+                return true;
+            }
+
+            return false;
+        }
+
+        /* $type instanceof ReflectionUnionType || $type instanceof ReflectionIntersectionType */
+        foreach ($actual->getTypes() as $subType) {
+            if ($subType->getName() === $expected) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getClassOfType(
         ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type
     ): ReflectionClass|null {

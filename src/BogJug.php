@@ -9,17 +9,23 @@ use BogJug\Services\ClassService;
 use BogJug\Services\PropertyService;
 use BogJug\Services\TypeService;
 use ReflectionClass;
+use ReflectionIntersectionType;
+use ReflectionNamedType;
+use ReflectionUnionType;
 
 final class BogJug
 {
     private ClassService $classService;
 
+    private TypeService $typeService;
+
     public function __construct()
     {
         $attributeService = new AttributeService();
+        $this->typeService = new TypeService();
         $this->classService = new ClassService(
             $attributeService,
-            new PropertyService($attributeService, new TypeService())
+            new PropertyService($attributeService, $this->typeService)
         );
     }
 
@@ -38,7 +44,7 @@ final class BogJug
     /**
      * Get one object from text
      *
-     * @template T
+     * @template T of object
      * @param class-string<T> $className
      * @return T|null
      */
@@ -52,27 +58,13 @@ final class BogJug
             return null;
         }
 
-        $arguments = [];
-        foreach ($reflectionClass->getProperties() as $property) {
-            $name = $property->getName();
-
-            if (isset($matches[$name])) {
-                $arguments[$name] = $matches[$name];
-            } else {
-                $arguments[$name] = null;
-            }
-        }
-
-        /** @var T $t */
-        $t = $reflectionClass->newInstanceArgs($arguments);
-
-        return $t;
+        return $this->objectFromMatches($reflectionClass, $matches);
     }
 
     /**
      * Get many object from text
      *
-     * @template T
+     * @template T of object
      * @param class-string<T> $className
      * @return T[]
      */
@@ -88,22 +80,50 @@ final class BogJug
 
         $result = [];
         foreach (array_keys($matches[0]) as $key) {
-            $arguments = [];
-            foreach ($reflectionClass->getProperties() as $property) {
-                $name = $property->getName();
+            $match = array_map(static fn (array $group) => $group[$key], $matches);
 
-                if (isset($matches[$name][$key])) {
-                    $arguments[$name] = $matches[$name][$key];
-                } else {
-                    $arguments[$name] = null;
-                }
-            }
-            /** @var T $t */
-            $t = $reflectionClass->newInstanceArgs($arguments);
-
-            $result[] = $t;
+            $result[] = $this->objectFromMatches($reflectionClass, $match);
         }
 
         return $result;
+    }
+
+    /**
+     * @template T of object
+     * @param ReflectionClass<T> $reflectionClass
+     * @param string[] $matches
+     * @return T
+     */
+    private function objectFromMatches(ReflectionClass $reflectionClass, array $matches): mixed
+    {
+        $arguments = [];
+        foreach ($reflectionClass->getProperties() as $property) {
+            $name = $property->getName();
+            /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
+            $type = $property->getType();
+
+            if (isset($matches[$name])) {
+                switch (true) {
+                    case $this->typeService->equalsType($type, 'int'):
+                        $arguments[$name] = (int) $matches[$name];
+                        break;
+                    case $this->typeService->equalsType($type, 'float'):
+                        $arguments[$name] = (float) $matches[$name];
+                        break;
+                    case $this->typeService->equalsType($type, 'bool'):
+                        $arguments[$name] = (bool) $matches[$name];
+                        break;
+                    default:
+                        $arguments[$name] = $matches[$name];
+                        break;
+                }
+            } else {
+                $arguments[$name] = null;
+            }
+        }
+        /** @var T $t */
+        $t = $reflectionClass->newInstanceArgs($arguments);
+
+        return $t;
     }
 }
