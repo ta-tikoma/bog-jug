@@ -37,17 +37,19 @@ final class PropertyService
         }
 
         foreach ($properites as $property) {
-            $regex .= $this->regexGroupFromProperty($property);
+            $regex .= $this->regexGroupFromProperty($reflectionClass, $property);
         }
 
         return $regex;
     }
 
-    private function regexGroupFromProperty(ReflectionProperty $property): string
+    private function regexGroupFromProperty(ReflectionClass $reflectionClass, ReflectionProperty $property): string
     {
+        $method = 'getGroupOptionsFor' . ucfirst($property->getName());
+
         $result = $this->getBeforeRegex($property)
             . "(?<{$property->getName()}>"
-            . $this->collectGroupOptions($property)
+            . $reflectionClass->hasMethod($method) ? call_user_func([$reflectionClass->getName(), $method]) : $this->collectGroupOptions($property)
             . ')'
             . $this->getCountRegex($property)
             . $this->getAfterRegex($property)
