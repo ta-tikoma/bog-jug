@@ -49,7 +49,9 @@ final class PropertyService
 
         $result = $this->getBeforeRegex($property)
             . "(?<{$property->getName()}>"
-            . $reflectionClass->hasMethod($method) ? call_user_func([$reflectionClass->getName(), $method]) : $this->collectGroupOptions($property)
+            . ($reflectionClass->hasMethod($method)
+                ? call_user_func([$reflectionClass->getName(), $method])
+                : $this->collectGroupOptions($property))
             . ')'
             . $this->getCountRegex($property)
             . $this->getAfterRegex($property)
