@@ -2,8 +2,11 @@
 Convert regex group to objects
 
 # Install
+`composer require ta-tikoma/bog-jug`
 
 # Use
+Method `one` of class BogJug for get first value equals regex.
+Method `many` of class BogJug for get all values equals regex.
 
 # Example
 #### 1. Define result object
