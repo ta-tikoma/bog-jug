@@ -114,7 +114,11 @@ final class BogJug
                         $arguments[$name] = (bool) $matches[$name];
                         break;
                     case class_exists($type->getName()):
-                        $arguments[$name] = $this->objectFromMatches(new ReflectionClass($type->getName()), $matches);
+                        if (empty($matches[$name])) {
+                            $arguments[$name] = null;
+                        } else {
+                            $arguments[$name] = $this->objectFromMatches(new ReflectionClass($type->getName()), $matches);
+                        }
                         break;
                     default:
                         $arguments[$name] = $matches[$name];
@@ -130,4 +134,3 @@ final class BogJug
         return $t;
     }
 }
-
