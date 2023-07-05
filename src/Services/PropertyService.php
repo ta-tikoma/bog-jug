@@ -83,15 +83,16 @@ final class PropertyService
         return $after->regex;
     }
 
+    /**
+     * @example return 'su|mo|tu|we|th|fr|sa'
+     */
     private function collectGroupOptions(ReflectionProperty $reflectionProperty): string
     {
         /** @var ReflectionNamedType|ReflectionUnionType|ReflectionIntersectionType|null $type */
         $type = $reflectionProperty->getType();
         $reflectionClass = $this->typeService->getClassOfType($type);
         if ($reflectionClass !== null) {
-            throw new Exception("Property{$reflectionProperty->getName()} can't be type of class");
-            // @todo
-            // return $this->regexGroupFromProperties($reflectionClass);
+            return $this->regexGroupFromProperties($reflectionClass);
         }
 
         $attributes = $reflectionProperty->getAttributes(Group::class);
@@ -162,3 +163,4 @@ final class PropertyService
         return '{1}';
     }
 }
+

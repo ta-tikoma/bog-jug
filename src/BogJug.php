@@ -113,6 +113,9 @@ final class BogJug
                     case $this->typeService->equalsType($type, 'bool'):
                         $arguments[$name] = (bool) $matches[$name];
                         break;
+                    case class_exists($type->getName()):
+                        $arguments[$name] = $this->objectFromMatches(new ReflectionClass($type->getName()), $matches);
+                        break;
                     default:
                         $arguments[$name] = $matches[$name];
                         break;
@@ -127,3 +130,4 @@ final class BogJug
         return $t;
     }
 }
+

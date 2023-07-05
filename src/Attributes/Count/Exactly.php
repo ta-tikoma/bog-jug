@@ -9,7 +9,7 @@ use Attribute;
 /**
  * Group count, like `{3}`
  */
-#[Attribute(Attribute::TARGET_PARAMETER)]
+#[Attribute(Attribute::TARGET_PARAMETER | Attribute::TARGET_PROPERTY)]
 final class Exactly
 {
     public function __construct(

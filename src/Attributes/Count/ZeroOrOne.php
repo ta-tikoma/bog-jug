@@ -9,7 +9,7 @@ use Attribute;
 /**
  * Group count, like `?`
  */
-#[Attribute(Attribute::TARGET_PARAMETER)]
+#[Attribute(Attribute::TARGET_PARAMETER | Attribute::TARGET_PROPERTY)]
 final class ZeroOrOne
 {
 }

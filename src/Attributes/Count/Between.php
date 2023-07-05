@@ -9,7 +9,7 @@ use Attribute;
 /**
  * Group count, like `{3,6}`
  */
-#[Attribute(Attribute::TARGET_PARAMETER)]
+#[Attribute(Attribute::TARGET_PARAMETER | Attribute::TARGET_PROPERTY)]
 final class Between
 {
     public function __construct(
