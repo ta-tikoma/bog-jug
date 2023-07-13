@@ -1,15 +1,17 @@
 # Bog Jug
-Convert regex group to objects
+Convert regex group to objects.
 
 # Install
 `composer require ta-tikoma/bog-jug`
 
 # Use
-Method `one` of class BogJug for get first value equals regex.
-Method `many` of class BogJug for get all values equals regex.
+Create a class for regex descriptions. Use property attributes for defined regex group: `Group` for group body; `After` and `Before` for defined outside symbols. If you need to indicate the count of a group, use attributes like `ZeroOrOne`, `ZeroOrMore` and others from the namespace `BogJug\Attributes\Count`. Finally, you can add regex flags via the class attributes; for example: `SingleLine`. 
+Now create instance of class BogJug and use one of two base methods:
+Method `one` to find the first value equal to regex; analogue: `preg_match`. 
+Method `many` to get all values equal regex; analog: `preg_match_all`.
 
 # Example
-#### 1. Define result object
+#### 1. Define class of descriptions.
 ```php
 <?php
 
@@ -39,7 +41,7 @@ final class TinWoodman
     }
 }
 ```
-#### 2. Call
+#### 2. Call method of BogJug.
 ```php
         $bj = (new BogJug);
         $tw = $bj->one(TinWoodman::class, <<<OZ
@@ -50,7 +52,7 @@ as if he could not stir at all.
 OZ);
         dump($tw);
 ```
-#### 3. Result
+#### 3. Take result.
 ```bash
 ^ tests\Data\TinWoodman^ {#427
   +head: "head"

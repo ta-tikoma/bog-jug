@@ -50,7 +50,7 @@ final class PropertyService
         $result = $this->getBeforeRegex($property)
             . "(?<{$property->getName()}>"
             . ($reflectionClass->hasMethod($method)
-                ? call_user_func([$reflectionClass->getName(), $method])
+                ? call_user_func([$reflectionClass->getName(), $method]) // @phpstan-ignore-line
                 : $this->collectGroupOptions($property))
             . ')'
             . $this->getCountRegex($property)
@@ -163,4 +163,3 @@ final class PropertyService
         return '{1}';
     }
 }
-

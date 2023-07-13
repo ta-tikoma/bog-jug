@@ -33,5 +33,13 @@
         "classmap": [
             "tests/"
         ]
+    },
+    "scripts": {
+        "phpcs": [
+            "./vendor/bin/phpcs"
+        ],
+        "phpstan": [
+            "./vendor/bin/phpstan"
+        ]
     }
 }

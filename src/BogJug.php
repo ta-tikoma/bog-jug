@@ -117,7 +117,10 @@ final class BogJug
                         if (empty($matches[$name])) {
                             $arguments[$name] = null;
                         } else {
-                            $arguments[$name] = $this->objectFromMatches(new ReflectionClass($type->getName()), $matches);
+                            $arguments[$name] = $this->objectFromMatches(
+                                new ReflectionClass($type->getName()),
+                                $matches
+                            );
                         }
                         break;
                     default:
