@@ -5,10 +5,13 @@ Convert regex group to objects.
 `composer require ta-tikoma/bog-jug`
 
 # Use
-Create a class for regex descriptions. Use property attributes for defined regex group: `Group` for group body; `After` and `Before` for defined outside symbols. If you need to indicate the count of a group, use attributes like `ZeroOrOne`, `ZeroOrMore` and others from the namespace `BogJug\Attributes\Count`. Finally, you can add regex flags via the class attributes; for example: `SingleLine`. 
-Now create instance of class BogJug and use one of two base methods:
-Method `one` to find the first value equal to regex; analogue: `preg_match`. 
-Method `many` to get all values equal regex; analog: `preg_match_all`.
+Create a class for regex descriptions.  
+Use property attributes for defined regex group: `#[Group('...')]` for group body; `#[After]` and `#[Before]` for defined outside symbols.  
+If you need to indicate the count of a group, use attributes like `#[ZeroOrOne]`, `#[ZeroOrMore]` and others from the namespace `BogJug\Attributes\Count`.  
+Finally, you can add regex flags via the class attributes; for example: `#[SingleLine]`.  
+Now create instance of class BogJug and use one of two base methods:  
+Method `->one($regex, $text)` to find the first value equal to regex; analogue: `preg_match`.  
+Method `->many($regex, $text)` to get all values equal regex; analog: `preg_match_all`.
 
 # Example
 #### 1. Define class of descriptions.
