@@ -42,7 +42,7 @@ final class BogJug
     }
 
     /**
-     * Get one object from text
+     * Find the first value for object
      *
      * @template T of object
      * @param class-string<T> $className
@@ -62,7 +62,7 @@ final class BogJug
     }
 
     /**
-     * Get many object from text
+     * Get all values equal regex of object
      *
      * @template T of object
      * @param class-string<T> $className

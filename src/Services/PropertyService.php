@@ -84,7 +84,7 @@ final class PropertyService
     }
 
     /**
-     * @example return 'su|mo|tu|we|th|fr|sa'
+     * detected group regex
      */
     private function collectGroupOptions(ReflectionProperty $reflectionProperty): string
     {
@@ -110,7 +110,9 @@ final class PropertyService
         return implode('|', $options);
     }
 
-
+    /**
+     * detected group count
+     */
     private function getCountRegex(ReflectionProperty $reflectionProperty): string
     {
         /** @var Between|null $between */

@@ -10,6 +10,9 @@ use ReflectionProperty;
 
 final class AttributeService
 {
+    /**
+     * find attribute by className, return attribute instance if found
+     */
     public function getAttributeInstanseOrNull(
         ReflectionProperty|ReflectionClass $reflection,
         string $className

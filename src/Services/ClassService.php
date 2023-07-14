@@ -47,6 +47,9 @@ final class ClassService
         return $regex;
     }
 
+    /**
+     * collect flags by attributes
+     */
     private function getFlags(ReflectionClass $reflectionClass): string
     {
         $flags = [];
