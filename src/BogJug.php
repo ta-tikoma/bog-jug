@@ -113,7 +113,7 @@ final class BogJug
                     case $this->typeService->equalsType($type, 'bool'):
                         $arguments[$name] = (bool) $matches[$name];
                         break;
-                    case class_exists($type->getName()):
+                    case $type instanceof ReflectionNamedType && class_exists($type->getName()):
                         if (empty($matches[$name])) {
                             $arguments[$name] = null;
                         } else {

@@ -1,6 +1,9 @@
 # Bog Jug
 Helper for easy work with regex groups.  
-Convert regex group to objects.
+Mapped regex group to php-classes, because array is sucks.
+
+![Static Badge](https://img.shields.io/badge/PHPStan-level_8-brightgreen)
+![Static Badge](https://img.shields.io/badge/PHPCS-PSR12-brightgreen)
 
 # Install
 `composer require ta-tikoma/bog-jug`
@@ -14,7 +17,7 @@ Convert regex group to objects.
     - Method `->one($regex, $text)` to find the first value equal to regex; analogue: `preg_match`.  
     - Method `->many($regex, $text)` to get all values equal regex; analog: `preg_match_all`.
 
-# Example
+# Sample example
 #### 1. Define class of descriptions.
 ```php
 <?php
