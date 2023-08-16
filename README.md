@@ -2,10 +2,12 @@
 Helper for easy work with regex groups.  
 Mapped regex group to php-classes, because array is sucks.
 
+![Static Badge](https://img.shields.io/badge/PHP-8.1-brightgreen)
 ![Static Badge](https://img.shields.io/badge/PHPStan-level_8-brightgreen)
 ![Static Badge](https://img.shields.io/badge/PHPCS-PSR12-brightgreen)
+![Static Badge](https://img.shields.io/badge/license-MIT-brightgreen)
 
-# Install
+# [Install](https://packagist.org/packages/ta-tikoma/bog-jug)
 `composer require ta-tikoma/bog-jug`
 
 # Use
