@@ -14,19 +14,19 @@ final class TinWoodman
     public function __construct(
         #[Group('head')]
         #[After('.*')]
-        public readonly string $head,
+        public readonly string $noggin,
         #[Group('arms')]
         #[After('.*')]
-        public readonly string $arms,
+        public readonly string $upperLimbs,
         #[Group('legs')]
         #[After('.*')]
-        public readonly string $legs,
+        public readonly string $lowerLimbs,
         #[Group('body')]
         #[After('.*')]
-        public readonly string $body,
+        public readonly string $torso,
         #[Group('heart')]
         #[After('.*')]
-        public readonly string|null $heart,
+        public readonly string|null $coeur,
     ) {
     }
 }

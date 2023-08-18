@@ -13,7 +13,7 @@ final class FindOneObjectTest extends TestCase
 {
     public function test_try_to_parse_one_match_to_object(): void
     {
-        $bj = (new BogJug());
+        $bj = new BogJug();
 
         /** @var TinWoodman|null $tw */
         $tw = $bj->one(TinWoodman::class, <<<OZ
@@ -24,16 +24,16 @@ as if he could not stir at all.
 OZ);
 
         $this->assertNotNull($tw);
-        $this->assertNotNull($tw->head);
-        $this->assertNotNull($tw->arms);
-        $this->assertNotNull($tw->legs);
-        $this->assertNotNull($tw->body);
-        $this->assertNull($tw->heart);
+        $this->assertNotNull($tw->noggin);
+        $this->assertNotNull($tw->upperLimbs);
+        $this->assertNotNull($tw->lowerLimbs);
+        $this->assertNotNull($tw->torso);
+        $this->assertNull($tw->coeur);
     }
 
     public function test_try_to_parse_objects(): void
     {
-        $bj = (new BogJug());
+        $bj = new BogJug();
 
         $things = $bj->many(GreenThing::class, <<<OZ
 There were many people — men, women, and children — walking about,

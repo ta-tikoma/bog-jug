@@ -1,11 +1,11 @@
 # Bog Jug
-Helper for easy work with regex groups.  
+A tool that makes it easier to work with regex groups.
 Mapped regex group to php-classes, because array is sucks.
 
 ![Static Badge](https://img.shields.io/badge/PHP-8.1-brightgreen)
 ![Static Badge](https://img.shields.io/badge/PHPStan-level_8-brightgreen)
 ![Static Badge](https://img.shields.io/badge/PHPCS-PSR12-brightgreen)
-![Static Badge](https://img.shields.io/badge/license-MIT-brightgreen)
+![GitHub](https://img.shields.io/github/license/ta-tikoma/bog-jug)
 
 # [Install](https://packagist.org/packages/ta-tikoma/bog-jug)
 `composer require ta-tikoma/bog-jug`
@@ -37,22 +37,22 @@ final class TinWoodman
 {
     public function __construct(
         #[Group('head'), After('.*')]
-        public readonly string $head,
+        public readonly string $noggin,
         #[Group('arms'), After('.*')]
-        public readonly string $arms,
+        public readonly string $upperLimbs,
         #[Group('legs'), After('.*')]
-        public readonly string $legs,
+        public readonly string $lowerLimbs,
         #[Group('body'), After('.*')]
-        public readonly string $body,
+        public readonly string $torso,
         #[Group('heart'), After('.*')]
-        public readonly string|null $heart,
+        public readonly string|null $coeur,
     ) {
     }
 }
 ```
 #### 2. Call method of BogJug.
 ```php
-        $bj = (new BogJug);
+        $bj = new BogJug();
         $tw = $bj->one(TinWoodman::class, <<<OZ
 One of the big trees had been partly chopped through, and standing beside
 it, with an uplifted axe in his hands, was a man made entirely of tin. His head
@@ -64,10 +64,10 @@ OZ);
 #### 3. Take result.
 ```bash
 ^ tests\Data\TinWoodman^ {#427
-  +head: "head"
-  +arms: "arms"
-  +legs: "legs"
-  +body: "body"
-  +heart: null
+  +noggin: "head"
+  +upperLimbs: "arms"
+  +lowerLimbs: "legs"
+  +torso: "body"
+  +coeur: null
 }
 ```
